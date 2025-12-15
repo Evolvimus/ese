@@ -1,0 +1,25 @@
+{
+  "pages": [
+    {
+      "url": "https://developer.wordpress.org/",
+      "title": "WordPress Developer Resources | Developer.WordPress.org",
+      "description": "Official WordPress developer resources including a code reference, handbooks (for APIs, plugin and theme development, block editor), and more.",
+      "content_markdown": "- News\n - Showcase\n - Hosting\n - ExtendThemesPluginsPatternsBlocksOpenverse ↗︎\n - Themes\n - Plugins\n - Patterns\n - Blocks\n - Openverse ↗︎\n - LearnLearn WordPressDocumentationForumsDevelopersWordPress.tv ↗︎\n - Learn WordPress\n - Documentation\n - Forums\n - Developers\n - WordPress.tv ↗︎\n - CommunityMake WordPressEducationPhoto DirectoryFive for the FutureEventsJob Board ↗︎\n - Make WordPress\n - Education\n - Photo Directory\n - Five for the Future\n - Events\n - Job Board ↗︎\n - AboutAbout WordPressEnterpriseGutenberg ↗︎Swag Store ↗︎\n - About WordPress\n - Enterprise\n - Gutenberg ↗︎\n - Swag Store ↗︎\n - Get WordPress\n - Themes\n - Plugins\n - Patterns\n - Blocks\n - Openverse ↗︎\n - Learn WordPress\n - Documentation\n - Forums\n - Developers\n - WordPress.tv ↗︎\n - Make WordPress\n - Education\n - Photo Directory\n - Five for the Future\n - Events\n - Job Board ↗︎\n - About WordPress\n - Enterprise\n - Gutenberg ↗︎\n - Swag Store ↗︎\nWordPress Developer Resources\n - Developer Blog\n - Code Reference\n - WP-CLI Commands\n - Developer Blog\n - Code Reference\n - WP-CLI Commands\n\n# Developer Resources\n/The freedom to build\nSee what has changed in the WordPress API.\n\n# Documentation\n\n# Block Editor\nCreate the building blocks of WordPress.\n\n# Themes\nLearn how to build your own themes.\n\n# Plugins\nDive into the world of plugin authoring.\n\n# Common APIs\nExplore APIs in the software and the ecosystem.\n\n# Advanced Administration\nDig into the technical side of site management.\n\n# WordPress Playground\nRun WordPress entirely in your browser.\n\n# API Reference\n\n# Code reference\nRead through the codebase documentation.\n\n# REST API\nStart creating your own apps with WordPress.\n\n# Run WP-CLI Commands\nAccelerate your workflow managing WordPress.\n\n# Coding Standards\nEnsure your code is up to date.\n\n# Developer Blog\nCatch up on the latest news from the Developer Blog.\n - What's new for developers? (December 2025) Blocks · December 10, 2025\n - The importance of a good changelog Advanced · November 18, 2025\n - Introducing the WordPress Abilities API Common APIs · November 14, 2025\n\n# Get Involved\nStart your journey to contribute to WordPress.\n\n# Documentation Contributor Handbook\nHelp document WordPress.\n\n# Contribute to WordPress\nStart contributing to core.\n\n# More resources\n\n# DocumentationContributor Handbook\n\n# Core ContributorHandbook\n\n# Related\n\n# Learn WordPress\n - About\n - News\n - Hosting\n - Privacy\n - Showcase\n - Themes\n - Plugins\n - Patterns\n - Learn\n - Documentation\n - Developers\n - WordPress.tv ↗\n - Get Involved\n - Events\n - Donate ↗\n - Five for the Future\n - WordPress.com ↗\n - Matt ↗\n - bbPress ↗\n - BuddyPress ↗\n - Visit our X (formerly Twitter) account\n - Visit our Bluesky account\n - Visit our Mastodon account\n - Visit our Threads account\n - Visit our Facebook page\n - Visit our Instagram account\n - Visit our LinkedIn account\n - Visit our TikTok account\n - Visit our YouTube channel\n - Visit our Tumblr account",
+      "meta": {
+        "title": "WordPress Developer Resources | Developer.WordPress.org",
+        "description": "Official WordPress developer resources including a code reference, handbooks (for APIs, plugin and theme development, block editor), and more.",
+        "keywords": "",
+        "ogTitle": "WordPress Developer Resources | Developer.WordPress.org",
+        "ogImage": "https://developer.wordpress.org/wp-content/themes/wporg-developer-2023/images/opengraph-image.png",
+        "generator": "WordPress 7.0-alpha-61380"
+      },
+      "word_count": 465,
+      "ai_classification": {
+        "country": "DE",
+        "city": "Coburg",
+        "category": "Education"
+      },
+      "crawled_at": "2025-12-15T21:42:53.990Z"
+    }
+  ]
+}

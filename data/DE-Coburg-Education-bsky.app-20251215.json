@@ -1,0 +1,25 @@
+{
+  "pages": [
+    {
+      "url": "https://bsky.app/profile/wordpress.org",
+      "title": "@wordpress.org on Bluesky",
+      "description": "Publish your passion with the open source platform that powers the web. Follow for release updates, features, ways to contribute, & more https://make.wordpress.org/marketing/handbook/social-media/",
+      "content_markdown": "",
+      "meta": {
+        "title": "@wordpress.org on Bluesky",
+        "description": "Publish your passion with the open source platform that powers the web. Follow for release updates, features, ways to contribute, & more https://make.wordpress.org/marketing/handbook/social-media/",
+        "keywords": "",
+        "ogTitle": "WordPress (@wordpress.org)",
+        "ogImage": "https://cdn.bsky.app/img/banner/plain/did:plc:r2no5dzwjjkp4cysp43tqzxa/bafkreih5gckqaydsxujd5veey32zmdicpq2odcx7c64yjydahu3lo7tlai@jpeg",
+        "generator": "bskyweb"
+      },
+      "word_count": 0,
+      "ai_classification": {
+        "country": "DE",
+        "city": "Coburg",
+        "category": "Education"
+      },
+      "crawled_at": "2025-12-15T21:43:03.496Z"
+    }
+  ]
+}

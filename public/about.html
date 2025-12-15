@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESE | About</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <a href="index.html"
+        style="position: absolute; top: 30px; right: 30px; font-size: 1.5rem; text-decoration: none; opacity: 0.5; color: white;">✕</a>
+
+    <div class="container" style="justify-content: flex-start; padding-top: 100px;">
+        <h1 style="line-height: 0.8;">ABOUT ESE</h1>
+        <p style="max-width: 600px; margin-top: 30px; line-height: 1.8; color: #888; font-size: 1.1rem;">
+            ESE is the world's first decentralized, community-driven search engine powered by local AI nodes. We are
+            building the index that Big Tech forgot.
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-card" onclick="openModal('ai')">
+                <div class="feature-title">AI Core</div>
+                <p style="color: #666; line-height: 1.5;">
+                    Powered by <strong>Llama 3.2</strong>. We don't just match keywords; we understand the semantic
+                    meaning of every site.
+                </p>
+                <div style="margin-top:10px; font-size:0.8rem; color:var(--accent);">+ Learn More</div>
+            </div>
+
+            <div class="feature-card" onclick="openModal('cpp')">
+                <div class="feature-title">C++ Engine</div>
+                <p style="color: #666; line-height: 1.5;">
+                    Built on a custom high-performance C++ N-API module for lightning fast text analysis and HTML
+                    parsing.
+                </p>
+                <div style="margin-top:10px; font-size:0.8rem; color:var(--accent);">+ Learn More</div>
+            </div>
+
+            <div class="feature-card" onclick="openModal('spider')">
+                <div class="feature-title">Spider Mode</div>
+                <p style="color: #666; line-height: 1.5;">
+                    Our crawler intelligently identifies "Hub Pages" and spins out to discover hidden local gems.
+                </p>
+                <div style="margin-top:10px; font-size:0.8rem; color:var(--accent);">+ Learn More</div>
+            </div>
+
+            <div class="feature-card" onclick="openModal('open')">
+                <div class="feature-title">Open Index</div>
+                <p style="color: #666; line-height: 1.5;">
+                    Data belongs to the people. Our index is stored in open JSON formats, categorized by location and
+                    topic.
+                </p>
+                <div style="margin-top:10px; font-size:0.8rem; color:var(--accent);">+ Learn More</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 100px; margin-bottom: 50px;">
+            <p style="color: #444; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.8rem;">
+                Developed by Evolvimus in Coburg, Germany.
+            </p>
+        </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="infoModal" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 id="modalTitle" style="color: var(--accent); margin-bottom: 20px;"></h2>
+            <div id="modalText" style="line-height: 1.8; color: #ddd;"></div>
+            <button class="action-btn" style="margin-top: 30px; padding: 15px;" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const details = {
+            'ai': "Our AI Core leverages the power of **Llama 3.2 (3B)**, a state-of-the-art open large language model tailored for efficiency. <br><br>Instead of simple meta-tag scraping, ESE feeds the raw markdown content of every crawled page into the neural network. The model performs zero-shot classification to determine the precise **Category** (e.g., Government, Culinary, Tech), **City**, and **Country** context, even if the website itself doesn't explicitly state it.<br><br>This allows us to build a semantic map of the local web that keyword-based search engines simply cannot match.",
+
+            'cpp': "Performance is non-negotiable. While Node.js handles the I/O and orchestration, the heavy lifting of text processing is offloaded to a **custom C++ Module** via N-API.<br><br>This engine performs high-speed word frequency analysis, stop-word removal, and density calculations directly in memory. By bypassing the V8 garbage collector for these intensive tasks, we achieve **sub-millisecond** analysis times per page, allowing ESE to scale to millions of documents without slowing down.",
+
+            'spider': "The web is not a list; it's a graph. **Spider Mode** utilizes a heuristic link discovery algorithm. When the crawler hits a 'Hub Page' (like a city portal or a chamber of commerce list), it switches behavior.<br><br>It extracts external links, validates them against a database of local domain patterns (e.g., `.de` domains with city keywords), and queues them for **Deep Crawling**. This mimics human discovery, finding small businesses and clubs that don't have strong SEO but are highly relevant locally.",
+
+            'open': "We believe in the **Democratization of Data**. ESE does not lock data behind an API paywall or obscure it in a proprietary binary format.<br><br>Every crawled page is stored as a standalone, human-readable **JSON file** named hierarchically: `[Country]-[City]-[Category]-[Domain].json`.<br><br>This allows developers, researchers, and other AI agents to download, parse, and utilize the index directly. It's an open library for the digital age."
+        };
+
+        const titles = {
+            'ai': 'AI Core: Llama 3.2',
+            'cpp': 'High-Performance C++',
+            'spider': 'Spider Discovery Algorithm',
+            'open': 'Open Data Standard'
+        };
+
+        function openModal(key) {
+            document.getElementById('modalTitle').innerText = titles[key];
+            document.getElementById('modalText').innerHTML = details[key];
+            document.getElementById('infoModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').classList.remove('active');
+        }
+    </script>
+
+</body>
+
+</html>

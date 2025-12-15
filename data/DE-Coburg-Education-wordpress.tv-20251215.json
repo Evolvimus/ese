@@ -1,0 +1,25 @@
+{
+  "pages": [
+    {
+      "url": "https://wordpress.tv/",
+      "title": "WordPress.tv – WordPress-related videos curated and moderated by the WordPress.org community",
+      "description": "WordPress-related videos curated and moderated by the WordPress.org community",
+      "content_markdown": "- WordCamps\n - Meetups\n - Keynotes\n - How To\n - Get Involved\nState of the Word 2025\n\n# State of the Word 2025 State of the Word 2025\n\n# WordCampTV More →\n - Matt Mullenweg: Town Hall / AMA\t\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\tWordCamp Canada 2025\n - Keynote and Q&A\t\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\tWordCamp US 2025\n - WordCamp Asia 2025 Closing Keynote\t\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\tWordCamp Asia 2025\n - Fireside chat with Mary Hubbard and Matt Mullenweg\t\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\tWordCamp Europe 2025\n\n# Latest Videos\n - Progettare per l’inclusione culturale. CSS e accessibilità come strumenti chiave\n - Multilingual WordPress non solo per developers\n - Por qué casi NO uso el Content (y por qué tú tampoco deberías)\n - WordPress 6.9\n - Prototipazione con l’IA e la REST API di WordPress\n - ActivityPub e il Fediverso: WordPress alla conquista del mondo!\n - Facile dire “Community”\n - eCommerce y RGPD: blindando tu tienda online con sentido común (y legal)\n\n# Popular Videos\n - Marta Gallorini & WordPress Credits\n - Matt Mullenweg: Town Hall / AMA\n - How to hack Gutenberg blocks with Style variations and Block variations\n - Keynote and Q&A\n - Olvídate del micro perfecto y del “algún día”. 🎧 Lanza tu podcast ya.\n - WordPress Campus Connect Venue, Listing, and Event Scheduling\n - Using WordPress Playground to work with AI agents\n - State of the Word 2025\n - Resources\n\n\t\t\t\n\t\t\t\tMaking WordPress.tv\nWordPress.org\nWordPress.tv on Twitter\nWordPress.tv on YouTube\nWordPress.tv Team Blog\n - Making WordPress.tv\n - WordPress.org\n - WordPress.tv on Twitter\n - WordPress.tv on YouTube\n - WordPress.tv Team Blog\n - This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.\n\n# Resources\n - Making WordPress.tv\n - WordPress.org\n - WordPress.tv on Twitter\n - WordPress.tv on YouTube\n - WordPress.tv Team Blog\n - Blog at WordPress.com.\n - Get Involved\n - Privacy\n - Powered by VideoPress\nAn Joint\nSubscribe",
+      "meta": {
+        "title": "WordPress.tv – WordPress-related videos curated and moderated by the WordPress.org community",
+        "description": "WordPress-related videos curated and moderated by the WordPress.org community",
+        "keywords": "",
+        "ogTitle": "WordPress.tv",
+        "ogImage": "https://s0.wp.com/_si/?t=eyJpbWciOiJodHRwczpcL1wvczAud3AuY29tXC9pXC9ibGFuay5qcGciLCJ0eHQiOiJXb3JkUHJlc3MudHYiLCJ0ZW1wbGF0ZSI6ImhpZ2h3YXkiLCJmb250IjoiIiwiYmxvZ19pZCI6NTA4OTM5Mn0.u_xazKfpY6PATFJGvuXgZIdNM-Do8iV_PvZUWeG0wWgMQ",
+        "generator": "WordPress.com"
+      },
+      "word_count": 286,
+      "ai_classification": {
+        "country": "DE",
+        "city": "Coburg",
+        "category": "Education"
+      },
+      "crawled_at": "2025-12-15T21:42:53.644Z"
+    }
+  ]
+}

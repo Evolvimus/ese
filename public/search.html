@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESE | Search</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="search-page-container">
+        <!-- Header -->
+        <header
+            style="padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);">
+            <div style="font-weight: 900; font-size: 1.5rem;">ESE <span
+                    style="font-weight: 300; opacity: 0.5;">SEARCH</span></div>
+            <a href="index.html" style="color: #fff; text-decoration: none; font-size: 1.5rem;">✕</a>
+        </header>
+
+        <!-- Search Bar Area -->
+        <div style="padding: 40px 20px; text-align: center;">
+            <input type="text" id="searchInput" placeholder="Search the index..."
+                style="max-width: 800px; font-size: 1.5rem; padding: 25px;">
+        </div>
+
+        <!-- Results -->
+        <main id="results-area">
+            <div style="text-align:center; color: #444; margin-top: 50px;">
+                Type to search...
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const resultsArea = document.getElementById('results-area');
+        let searchIndex = [];
+
+        async function loadIndex() {
+            try {
+                const listRes = await fetch('/api/cities');
+                const files = await listRes.json();
+                if (files.length === 0) return;
+
+                for (const file of files) {
+                    try {
+                        const res = await fetch(`/data/cities/${file}`);
+                        const data = await res.json();
+                        if (data.pages) searchIndex = searchIndex.concat(data.pages);
+                    } catch (err) { }
+                }
+            } catch (e) { }
+        }
+
+        function performSearch(query) {
+            if (!query) {
+                resultsArea.innerHTML = '';
+                return;
+            }
+            const lowerQuery = query.toLowerCase();
+            const matches = searchIndex.filter(page => {
+                return (page.title && page.title.toLowerCase().includes(lowerQuery)) ||
+                    (page.url && page.url.toLowerCase().includes(lowerQuery));
+            });
+            renderResults(matches);
+        }
+
+        function renderResults(results) {
+            if (results.length === 0) {
+                resultsArea.innerHTML = '<div style="text-align:center; color:#666">No results found.</div>';
+                return;
+            }
+
+            resultsArea.innerHTML = results.map((item, index) => {
+                const jsonString = encodeURIComponent(JSON.stringify(item, null, 2));
+                const category = item.ai_classification ? item.ai_classification.category : 'General';
+                const location = item.ai_classification ? `${item.ai_classification.city}, ${item.ai_classification.country}` : 'Unknown';
+
+                return `
+                <div class="result-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px;">
+                                ${category} • ${location}
+                            </div>
+                            <a href="${item.url}" target="_blank" style="text-decoration:none; color: inherit;">
+                                <h3 class="result-title" style="font-size: 1.4rem;">${item.title || 'Untitled Page'}</h3>
+                            </a>
+                            <div class="result-url" style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">${item.url}</div>
+                        </div>
+                        <button onclick="viewJson('${jsonString}')" style="background: transparent; border: 1px solid #444; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 5px; font-size: 0.7rem;">JSON</button>
+                    </div>
+                    
+                    <div class="result-snippet" style="border-left: 2px solid #333; padding-left: 10px;">
+                        ${item.snippet || item.description || 'No description available.'}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function viewJson(encData) {
+            const data = decodeURIComponent(encData);
+            const win = window.open("", "JSON View", "width=800,height=800");
+            win.document.write(`
+                <body style="background:#050505; color:#0f0; padding:20px; font-family:monospace;">
+                    <pre>${data}</pre>
+                </body>
+            `);
+        }
+
+        searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+        loadIndex();
+        searchInput.focus();
+    </script>
+</body>
+
+</html>

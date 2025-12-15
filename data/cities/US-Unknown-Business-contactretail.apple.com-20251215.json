@@ -1,0 +1,76 @@
+{
+  "pages": [
+    {
+      "url": "https://contactretail.apple.com/?pg=COM:/airpods/&ap=COM&c=us&l=en&ag=FASTPASS",
+      "title": "Untitled",
+      "description": "",
+      "content_markdown": "",
+      "meta": {
+        "title": "",
+        "description": "",
+        "keywords": ""
+      },
+      "word_count": 0,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T21:53:42.021Z"
+    },
+    {
+      "url": "https://contactretail.apple.com/?pg=COM:/tv-home&ap=COM&c=us&l=en&ag=FASTPASS",
+      "title": "Untitled",
+      "description": "",
+      "content_markdown": "",
+      "meta": {
+        "title": "",
+        "description": "",
+        "keywords": ""
+      },
+      "word_count": 0,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T21:54:28.347Z"
+    },
+    {
+      "url": "https://contactretail.apple.com/?pg=COM:airtag&ap=COM&c=us&l=en&ag=FASTPASS",
+      "title": "Untitled",
+      "description": "",
+      "content_markdown": "",
+      "meta": {
+        "title": "",
+        "description": "",
+        "keywords": ""
+      },
+      "word_count": 0,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T21:57:35.546Z"
+    },
+    {
+      "url": "https://contactretail.apple.com/?c=us&l=en&ap=COM&pg=small_business_retail&ag=FASTPASS&td=target_smb_retail",
+      "title": "Untitled",
+      "description": "",
+      "content_markdown": "",
+      "meta": {
+        "title": "",
+        "description": "",
+        "keywords": ""
+      },
+      "word_count": 0,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T22:11:56.909Z"
+    }
+  ]
+}

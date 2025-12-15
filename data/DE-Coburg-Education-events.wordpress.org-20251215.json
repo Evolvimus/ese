@@ -1,0 +1,25 @@
+{
+  "pages": [
+    {
+      "url": "https://events.wordpress.org/",
+      "title": "WordPress Events",
+      "description": "Find upcoming WordPress events near you and around the world. Join your local WordPress community at a meetup or WordCamp, or learn how to organize an event for your city.",
+      "content_markdown": "- News\n - Showcase\n - Hosting\n - ExtendThemesPluginsPatternsBlocksOpenverse ↗︎\n - Themes\n - Plugins\n - Patterns\n - Blocks\n - Openverse ↗︎\n - LearnLearn WordPressDocumentationForumsDevelopersWordPress.tv ↗︎\n - Learn WordPress\n - Documentation\n - Forums\n - Developers\n - WordPress.tv ↗︎\n - CommunityMake WordPressEducationPhoto DirectoryFive for the FutureEventsJob Board ↗︎\n - Make WordPress\n - Education\n - Photo Directory\n - Five for the Future\n - Events\n - Job Board ↗︎\n - AboutAbout WordPressEnterpriseGutenberg ↗︎Swag Store ↗︎\n - About WordPress\n - Enterprise\n - Gutenberg ↗︎\n - Swag Store ↗︎\n - Get WordPress\n - Themes\n - Plugins\n - Patterns\n - Blocks\n - Openverse ↗︎\n - Learn WordPress\n - Documentation\n - Forums\n - Developers\n - WordPress.tv ↗︎\n - Make WordPress\n - Education\n - Photo Directory\n - Five for the Future\n - Events\n - Job Board ↗︎\n - About WordPress\n - Enterprise\n - Gutenberg ↗︎\n - Swag Store ↗︎\nWordPress Events\n - Upcoming events\n - Organize an event\n - Upcoming events\n - Organize an event\n\n# Meet the community behind WordPress\nAll over the world contributors meet to share, learn, and collaborate on the WordPress project.\n4,099 events this year\n107 countries\n+500,000 participants\n\n# Upcoming events\n\n# Format\n\n# Type\n\n# Month\n\n# Country\nLoading global events…\n\n# Where WordPress contributors meet\n - WordCamp Central ↗\n - WordPress Campus Connect ↗\n - Meetup.com ↗\n - Do_Action hackathons ↗\n - NextGen events in Community blog ↗\nCan’t find a WordPress event near you? Become an organizer and start hosting local events where you live today.\n - About\n - News\n - Hosting\n - Privacy\n - Showcase\n - Themes\n - Plugins\n - Patterns\n - Learn\n - Documentation\n - Developers\n - WordPress.tv ↗\n - Get Involved\n - Events\n - Donate ↗\n - Five for the Future\n - WordPress.com ↗\n - Matt ↗\n - bbPress ↗\n - BuddyPress ↗\n - Visit our X (formerly Twitter) account\n - Visit our Bluesky account\n - Visit our Mastodon account\n - Visit our Threads account\n - Visit our Facebook page\n - Visit our Instagram account\n - Visit our LinkedIn account\n - Visit our TikTok account\n - Visit our YouTube channel\n - Visit our Tumblr account",
+      "meta": {
+        "title": "WordPress Events",
+        "description": "Find upcoming WordPress events near you and around the world. Join your local WordPress community at a meetup or WordCamp, or learn how to organize an event for your city.",
+        "keywords": "",
+        "ogTitle": "WordPress Events",
+        "ogImage": "https://events.wordpress.org/wp-content/themes/wporg-events-2023/images/social-image.png",
+        "generator": "WordPress 6.9.1-alpha-61378"
+      },
+      "word_count": 347,
+      "ai_classification": {
+        "country": "DE",
+        "city": "Coburg",
+        "category": "Education"
+      },
+      "crawled_at": "2025-12-15T21:42:59.493Z"
+    }
+  ]
+}

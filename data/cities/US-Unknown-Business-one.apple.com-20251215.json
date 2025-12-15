@@ -1,0 +1,24 @@
+{
+  "pages": [
+    {
+      "url": "https://one.apple.com/?itscg=10000&itsct=one-NA-lcl_nv_def-lp-apl-abt-20524",
+      "title": "Apple One - Apple - Upgrade Your OS",
+      "description": "Bundle your Apple services and pay one convenient price with Apple One. Choose the plan that’s right for you.",
+      "content_markdown": "# Update to the latest iOS, iPadOS, or macOS to get Apple One.\nApple One bundles up to six great Apple services into one easy subscription. Apple Music, Apple TV+, Apple Arcade, Apple News+, the all-new Apple Fitness+ powered by Apple Watch, and iCloud+ all come together for you or your entire family to enjoy. Update your iPhone, iPad or Mac to the latest OS to get Apple One and choose the plan that’s right for you.\nFollow the steps below to get started:\n - For iPhone and iPad, go to Settings > General > Software Update\n - For Mac, go to System Preferences > Software Update\nOnce your device is updated, go to Settings, tap your name, and select Subscriptions. Then choose your plan and start enjoying the services included with Apple One across all your devices.",
+      "meta": {
+        "title": "Apple One - Apple - Upgrade Your OS",
+        "description": "Bundle your Apple services and pay one convenient price with Apple One. Choose the plan that’s right for you.",
+        "keywords": "",
+        "ogTitle": "Apple One",
+        "ogImage": "https://one.apple.com/assets/og_p.png"
+      },
+      "word_count": 132,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T22:01:27.350Z"
+    }
+  ]
+}

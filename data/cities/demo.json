@@ -1,0 +1,20 @@
+{
+  "domain": "mixed",
+  "city": "demo",
+  "pages": [
+    {
+      "url": "https://example.com",
+      "title": "Example Domain",
+      "snippet": "Example DomainThis domain is for use in documentation examples without needing permission. Avoid use in operations.Learn more...",
+      "word_count": 17,
+      "crawled_at": "2025-12-15T16:30:08.861Z"
+    },
+    {
+      "url": "https://info.cern.ch/",
+      "title": "http://info.cern.ch",
+      "snippet": "http://info.cern.ch http://info.cern.ch - home of the first website From here you can: Browse the first website Browse the first website using the lin...",
+      "word_count": 43,
+      "crawled_at": "2025-12-15T16:30:09.103Z"
+    }
+  ]
+}

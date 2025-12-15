@@ -1,0 +1,62 @@
+{
+  "pages": [
+    {
+      "url": "https://card.apple.com/",
+      "title": "Apple Card",
+      "description": "Apple Card",
+      "content_markdown": "",
+      "meta": {
+        "title": "Apple Card",
+        "description": "Apple Card",
+        "keywords": "apple card, apple, pay apple card, payment, installment, billing, Apple Card Monthly Installments",
+        "ogImage": "https://www.apple.com/v/apple-card/l/images/overview/hero_iphone__errwhundjmky_small_2x.png"
+      },
+      "word_count": 0,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T21:54:28.125Z"
+    },
+    {
+      "url": "https://card.apple.com/apply/application?referrer=cid%3Dapy-200-10000036&start=false",
+      "title": "Apple Card Application",
+      "description": "Apple Card is a better kind of credit card. And with Apple Card Monthly Installments, you can pay for a new iPhone with interest-free payments.",
+      "content_markdown": "",
+      "meta": {
+        "title": "Apple Card Application",
+        "description": "Apple Card is a better kind of credit card. And with Apple Card Monthly Installments, you can pay for a new iPhone with interest-free payments.",
+        "keywords": "",
+        "ogTitle": "Apple Card Application",
+        "ogImage": "https://www.apple.com/v/apple-card/l/images/overview/hero_iphone__errwhundjmky_small_2x.png"
+      },
+      "word_count": 0,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T21:59:40.889Z"
+    },
+    {
+      "url": "http://card.apple.com/",
+      "title": "Apple Card",
+      "description": "Apple Card",
+      "content_markdown": "",
+      "meta": {
+        "title": "Apple Card",
+        "description": "Apple Card",
+        "keywords": "apple card, apple, pay apple card, payment, installment, billing, Apple Card Monthly Installments",
+        "ogImage": "https://www.apple.com/v/apple-card/l/images/overview/hero_iphone__errwhundjmky_small_2x.png"
+      },
+      "word_count": 0,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T22:10:47.440Z"
+    }
+  ]
+}

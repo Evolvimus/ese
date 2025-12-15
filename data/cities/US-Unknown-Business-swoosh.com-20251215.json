@@ -1,0 +1,22 @@
+{
+  "pages": [
+    {
+      "url": "https://swoosh.com/",
+      "title": "Welcome to Swoosh.com",
+      "description": "",
+      "content_markdown": "# Welcome to Swoosh.com\nQuestions?\nSwoosh Customer Service: 1 (888) 365-6453\n\n# Free shipping on orders of $75 or more\nAre you part of an employee’s family?\nYou cannot begin registration here. You must wait to receive a registration email from the Nike employee in your family.\nSwoosh.com products are displayed with the discounted price. Some restrictions apply: Excludes Nike By You products, Members Only products and select styles. Shipping charges will apply and are added at checkout.",
+      "meta": {
+        "title": "Welcome to Swoosh.com",
+        "description": "",
+        "keywords": ""
+      },
+      "word_count": 78,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T22:00:09.976Z"
+    }
+  ]
+}

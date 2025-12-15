@@ -1,0 +1,24 @@
+{
+  "pages": [
+    {
+      "url": "https://www.ubereats.com/partnerships?code=groupCode%7EApple_Card_Production_group_code&offering-id=be8fc44e-1ab6-4903-9fd7-e10374d1d47d&pass-campaign=PARTNER_Apple_Card_Production&access-point=partner&screen-id=offering-redemption",
+      "title": "Partnerschaften | Uber Eats",
+      "description": "",
+      "content_markdown": "- Ein Geschäftskonto anlegen\n - Füge dein Restaurant hinzu.\n - Registriere dich als Kurier*in\n - Fahrt bestellen\n - Hilfe erhalten\n - Füge dein Restaurant hinzu.\n - Registriere dich als Kurier*in\n - Ein Geschäftskonto anlegen\n - Restaurants in meiner Nähe\n - Alle Städte anzeigen\n - Alle Länder anzeigen\n - Zur Abholung in meiner Nähe\n - Über Uber Eats\n - Deutsch",
+      "meta": {
+        "title": "Partnerschaften | Uber Eats",
+        "description": "",
+        "keywords": "",
+        "ogTitle": "Partnerschaften | Uber Eats",
+        "ogImage": "https://tb-static.uber.com/prod/web-eats-v2/open-graph/uber-eats.jpg"
+      },
+      "word_count": 59,
+      "ai_classification": {
+        "country": "US",
+        "city": "Unknown",
+        "category": "Business"
+      },
+      "crawled_at": "2025-12-15T22:00:19.078Z"
+    }
+  ]
+}
