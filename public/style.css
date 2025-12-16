@@ -1,11 +1,14 @@
 :root {
     --bg-dark: #050505;
-    --text-main: #ffffff;
-    --text-dim: #666666;
+    --text-main: #e0e0e0;
+    /* Silver */
+    --text-dim: #888888;
     --accent: #00ff88;
-    --accent-dim: rgba(0, 255, 136, 0.1);
-    --glass: rgba(255, 255, 255, 0.03);
-    --border: rgba(255, 255, 255, 0.1);
+    /* Keep neon green but sparse */
+    --accent-dim: rgba(0, 255, 136, 0.05);
+    --glass: rgba(255, 255, 255, 0.02);
+    --border: rgba(255, 255, 255, 0.15);
+    /* Sharper borders */
     --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -36,6 +39,14 @@ body {
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    background: linear-gradient(180deg, rgba(5, 5, 5, 0.9) 0%, rgba(5, 5, 5, 0) 100%);
+    /* Readability gradient */
+}
+
+.nav-left {
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
 .nav-link {
@@ -64,7 +75,8 @@ h1 {
     letter-spacing: -0.05em;
     line-height: 0.9;
     text-transform: uppercase;
-    background: linear-gradient(180deg, #fff, #444);
+    background: linear-gradient(180deg, #fff, #999);
+    /* Silver Gradient */
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -75,7 +87,7 @@ h2 {
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 1rem;
-    color: #fff;
+    color: #e0e0e0;
 }
 
 /* --- Layout utils --- */
@@ -85,9 +97,10 @@ h2 {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-align: center;
+    margin-top: 80px;
+    /* Optical adjustment: Push down slightly on desktop */
 }
 
 /* --- Inputs & Interactive --- */
@@ -103,18 +116,22 @@ h2 {
 input[type="text"],
 select {
     width: 100%;
-    background: var(--glass);
-    border: 1px solid var(--border);
+    background: #0a0a0a;
+    /* Darker, cleaner */
+    border: 1px solid #333;
+    /* Specific silver-ish border */
     padding: 20px;
     color: #fff;
     font-size: 1.1rem;
-    border-radius: 12px;
+    border-radius: 4px;
+    /* Sharper */
     outline: none;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
     margin-bottom: 15px;
     -webkit-appearance: none;
-    /* Mobile fix */
+    appearance: none;
+    font-family: monospace;
+    /* Tech feel */
 }
 
 input:focus,
@@ -276,7 +293,8 @@ select:focus {
 /* --- Desktop Tweaks --- */
 @media (min-width: 768px) {
     h1 {
-        font-size: 120px;
+        font-size: 150px;
+        /* Adjusted: 120px -> 180px -> 150px */
     }
 
     .features-grid {
@@ -289,19 +307,20 @@ select:focus {
 }
 
 /* --- Mobile Specific Tweaks --- */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .container {
         width: 95%;
+        justify-content: flex-start;
+        margin-top: 0;
+        padding-top: 120px;
     }
 
     .submission-container {
         margin-top: 20px;
-        /* Tighter spacing */
     }
 
     .action-btn {
         padding: 16px;
-        /* Slightly smaller button */
     }
 
     .server-ticker {
@@ -310,14 +329,22 @@ select:focus {
 
     .ticker-content {
         gap: 10px 15px;
-        /* Tighter ticker */
     }
 
     h1 {
-        font-size: 3.5rem;
-        /* Ensure it fits on small screens */
+        font-size: 3rem;
+        margin-top: 20px;
+    }
+
+    .nav-header {
+        padding: 20px;
+    }
+
+    .nav-link {
+        font-size: 0.8rem;
     }
 }
+
 
 /* --- Modal System --- */
 .modal-overlay {

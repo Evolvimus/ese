@@ -47,18 +47,27 @@ class Storage {
         let data = { pages: [] };
 
         // Append to existing file if it exists (e.g. searching same domain multiple times today)
+        // Append to existing file if it exists (e.g. searching same domain multiple times today)
         try {
             if (fs.existsSync(filePath)) {
                 const fileContent = fs.readFileSync(filePath, 'utf-8');
-                data = JSON.parse(fileContent);
+                try {
+                    data = JSON.parse(fileContent);
+                } catch (jsonErr) {
+                    console.error(`[Storage] Corrupt JSON in ${filename}, resetting.`);
+                }
             }
-        } catch (e) { }
+        } catch (e) {
+            console.error(`[Storage] Read error for ${filename}`, e);
+        }
 
         // Avoid duplicates in the same file
         if (!data.pages.some(p => p.url === pageData.url)) {
             data.pages.push(pageData);
             fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
             console.log(`[Storage] Saved to ${filename}`);
+        } else {
+            console.log(`[Storage] Duplicate skipped: ${pageData.url}`);
         }
     }
 }

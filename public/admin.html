@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESE | Admin Console</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Admin Specific Overrides */
+        body {
+            background: radial-gradient(circle at top center, #1a1a1a 0%, #050505 80%);
+            min-height: 100vh;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .admin-glass-panel {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .admin-glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 255, 136, 0.05);
+            /* Subtle glow */
+        }
+
+        /* Dashboard Grid */
+        .dashboard-container {
+            display: none;
+            /* Toggled via JS */
+            max-width: 1200px;
+            margin: 100px auto 40px;
+            width: 95%;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            animation: fadeUp 0.6s ease-out;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dash-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dash-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0.5;
+        }
+
+        .dash-card h3 {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .dash-stat {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .queue-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .queue-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .queue-list::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .queue-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            border-left: 2px solid transparent;
+        }
+
+        .queue-item.active {
+            border-left-color: var(--accent);
+            background: linear-gradient(90deg, rgba(0, 255, 136, 0.05), transparent);
+        }
+
+        .status-badge {
+            background: #222;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        /* Buttons */
+        .btn-update {
+            background: var(--accent);
+            color: #000;
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 15px;
+        }
+
+        .btn-update:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .admin-nav {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            color: #444;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="nav-header">
+        <div class="logo" style="font-weight:900; letter-spacing:-0.05em; font-size:1.2rem;">ESE <span
+                style="color:var(--accent); font-size:0.8rem; letter-spacing:0.1em; vertical-align:middle; margin-left:5px;">CONTROL
+                CENTRE</span></div>
+        <a href="/" class="nav-link">BACK TO SEARCH</a>
+    </div>
+
+    <!-- Login View -->
+    <div id="login-view" class="auth-wrapper">
+        <div class="admin-glass-panel">
+            <h2 style="font-size: 2rem; margin-bottom: 10px;">Access Control</h2>
+            <p style="color:#666; margin-bottom: 30px;">Restricted Area. Authorized Personnel Only.</p>
+
+            <input type="password" id="admin-pass" placeholder="Passphrase"
+                style="text-align: center; margin-bottom: 20px;">
+            <button onclick="attemptLogin()" class="action-btn">Terminate Lock</button>
+            <p id="login-error" style="color: #ff4444; display: none; margin-top: 20px; font-size: 0.9rem;"></p>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="dashboard-container">
+
+        <!-- CONTROL CARD -->
+        <div class="dash-card">
+            <h3>Maintenance Operations</h3>
+            <p style="color: #888; font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">
+                Force re-indexation of outdated content. This will scan the entire database for pages older than 72
+                hours and queue them for immediate crawling.
+            </p>
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span style="color:#666; font-size:0.8rem;">SERVER LOAD</span>
+                    <span style="color:var(--accent); font-size:0.8rem;">OPTIMAL</span>
+                </div>
+                <div style="width:100%; height:4px; background:#333; border-radius:2px;">
+                    <div style="width:20%; height:100%; background:var(--accent); border-radius:2px;"></div>
+                </div>
+            </div>
+            <button class="btn-update" onclick="triggerUpdate()">Trigger Global Update</button>
+            <p id="update-msg"
+                style="margin-top: 15px; font-weight: bold; font-family: monospace; font-size:0.8rem; color: #fff;"></p>
+        </div>
+
+        <!-- QUEUE CARD -->
+        <div class="dash-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>Active Queue</h3>
+                <span id="queue-count" class="status-badge" style="background:rgba(255,255,255,0.1); color:#fff;">0
+                    PENDING</span>
+            </div>
+
+            <ul id="queue-list" class="queue-list">
+                <!-- Items injected via JS -->
+                <div style="text-align: center; padding: 40px 0; color: #444;">No Pending Operations</div>
+            </ul>
+        </div>
+
+        <!-- ACTIVE JOB CARD -->
+        <div class="dash-card">
+            <h3>Current Operation</h3>
+            <div id="active-job-container">
+                <div class="dash-stat" style="font-size: 1.2rem; color: #666;">SYSTEM IDLE</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

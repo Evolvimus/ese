@@ -12,13 +12,16 @@
 <body>
 
     <div class="nav-header">
-        <a href="about.html" class="nav-link">ABOUT</a>
+        <div class="nav-left">
+            <a href="about.html" class="nav-link">ABOUT</a>
+            <a href="#" onclick="openLiveView()" class="nav-link" style="color: var(--accent);">LIVE</a>
+        </div>
         <a href="search.html" class="nav-icon">🔍</a>
     </div>
 
     <div class="container">
         <h1>ESE</h1>
-        <div style="font-size: 1.2rem; color: #666; letter-spacing: 0.2em; margin-top: -20px; margin-bottom: 60px;">THE
+        <div style="font-size: 1.2rem; color: #666; letter-spacing: 0.2em; margin-top: -20px; margin-bottom: 60px;">
             Evolvimus Search Engine</div>
 
         <div style="margin-bottom: 40px;">
@@ -53,8 +56,6 @@
             </div>
             <div class="server-loc">Silicon Valley <div class="status-dot"></div>
             </div>
-            <div class="server-loc">Frankfurt <div class="status-dot"></div>
-            </div>
             <div class="server-loc">Oslo <div class="status-dot"></div>
             </div>
             <div class="server-loc">Nürnberg <div class="status-dot"></div>
@@ -72,83 +73,268 @@
 
             <!-- Active Node -->
             <div class="server-loc active">Coburg <div class="status-dot"></div>
+                <div class="server-loc active">Frankfurt<div class="status-dot"></div>
+
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        // Stats
-        async function loadStats() {
-            try {
-                const res = await fetch('/api/stats');
-                const data = await res.json();
-                document.getElementById('pageCounter').innerText = data.total_pages.toLocaleString();
-            } catch (e) { }
-        }
-        setInterval(loadStats, 2000);
-        loadStats();
+        <!-- Ticket Modal -->
+        <div id="ticket-modal" class="modal-overlay">
+            <div class="modal-content" style="text-align: center;">
+                <div style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;">🎫</div>
+                <h2 id="modal-title" style="margin-bottom: 10px; color: #fff;">Ticket Assigned</h2>
+                <div id="modal-body" style="font-size: 1.1rem; color: #ccc; margin-bottom: 30px; line-height: 1.6;">
+                    Processing your request...
+                </div>
+                <button class="action-btn" onclick="closeModal()"
+                    style="padding: 15px 30px; width: auto;">Acknowledge</button>
+            </div>
+        </div>
 
-        // Terminal Logic
-        let evtSource = null;
+        <!-- Live View Overlay -->
+        <div id="live-view" class="modal-overlay" style="z-index: 2000;">
+            <div class="modal-content" style="max-width: 800px; text-align: left; width: 95%;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h2 style="margin:0; font-size:1.5rem;">Live Status</h2>
+                    <button onclick="closeLiveView()"
+                        style="background:none; border:none; color:#fff; font-size:2rem; cursor:pointer; line-height:1;">&times;</button>
+                </div>
 
-        function initTerminal() {
-            const term = document.getElementById('terminal');
-            const termBody = document.getElementById('terminal-content');
-            term.style.display = 'block';
+                <div style="margin-bottom: 30px;">
+                    <div
+                        style="font-size: 0.9rem; color: #666; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.1em;">
+                        Ticket ID</div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="ticketInput" placeholder="Enter Ticket Number" style="margin-bottom: 0;">
+                        <button class="action-btn" onclick="trackTicket()"
+                            style="width: auto; padding: 0 30px;">TRACK</button>
+                    </div>
+                </div>
 
-            if (evtSource) return;
+                <div id="live-status-container" style="display:none; animation: fadeIn 0.5s ease;">
+                    <!-- Queue Status -->
+                    <div id="live-queue-msg"
+                        style="margin-bottom: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; border-left: 4px solid var(--accent);">
+                    </div>
 
-            evtSource = new EventSource('/api/stream');
+                    <!-- Active Terminal -->
+                    <div id="live-terminal-wrapper" style="display:none;">
+                        <div style="color: var(--accent); margin-bottom: 10px; font-weight: bold;">LIVE FEED</div>
+                        <div class="terminal-window" style="margin-top: 0; height: 300px;">
+                            <div class="terminal-header">
+                                <span style="color: #666;">stream@ese-node:~#</span> <span
+                                    id="live-target">waiting...</span>
+                            </div>
+                            <div id="live-terminal-body" class="terminal-body" style="height: 260px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            evtSource.onmessage = function (e) {
-                const data = JSON.parse(e.data);
-                const line = document.createElement('div');
-                line.style.marginBottom = '4px';
-                line.style.fontFamily = 'monospace';
-
-                // Colors
-                if (data.type === 'ai') line.style.color = '#bf00ff'; // Neon Purple for AI
-                else if (data.type === 'ai_success') line.style.color = '#d455ff';
-                else if (data.type === 'crawl') line.style.color = '#00ff88'; // Green
-                else if (data.type === 'save') line.style.color = '#fff';
-                else if (data.type === 'error') line.style.color = '#ff4444';
-                else line.style.color = '#888';
-
-                const time = data.timestamp.split('T')[1].split('.')[0];
-                line.innerText = `[${time}] ${data.message}`;
-
-                termBody.appendChild(line);
-                termBody.scrollTop = termBody.scrollHeight; // Auto scroll
-            };
-        }
-
-        async function submitUrl() {
-            const url = document.getElementById('urlInput').value;
-            const statusEl = document.getElementById('status');
-
-            if (!url) return;
-
-            // Start Terminal immediately
-            initTerminal();
-            statusEl.innerText = "Initializing connection...";
-
-            try {
-                const res = await fetch('/api/submit', {
-                    method: 'POST',
-                    body: JSON.stringify({ url, category: 'auto' })
-                });
-                const data = await res.json();
-                if (data.status === 'queued') {
-                    statusEl.innerText = "Job Queued. Watch terminal below.";
-                    document.getElementById('urlInput').value = "";
-                } else {
-                    statusEl.innerText = "Signal Lost: " + data.error;
-                }
-            } catch (e) {
-                statusEl.innerText = "Connection Failed.";
+        <script>
+            // Stats
+            async function loadStats() {
+                try {
+                    const res = await fetch('/api/stats');
+                    const data = await res.json();
+                    document.getElementById('pageCounter').innerText = data.total_pages.toLocaleString();
+                } catch (e) { }
             }
-        }
-    </script>
+            setInterval(loadStats, 2000);
+            loadStats();
+
+            // Terminal Logic
+            let evtSource = null;
+
+            function initTerminal() {
+                const term = document.getElementById('terminal'); // Main page terminal
+                const termBody = document.getElementById('terminal-content');
+                const liveBody = document.getElementById('live-terminal-body'); // Modal terminal
+
+                term.style.display = 'block'; // Ensure main is visible if active
+
+                if (evtSource) return;
+
+                evtSource = new EventSource('/api/stream');
+
+                evtSource.onmessage = function (e) {
+                    const data = JSON.parse(e.data);
+
+                    // Helper to create line
+                    function createLine() {
+                        const line = document.createElement('div');
+                        line.style.marginBottom = '4px';
+                        line.style.fontFamily = 'monospace';
+                        // Colors
+                        if (data.type === 'ai') line.style.color = '#bf00ff';
+                        else if (data.type === 'ai_success') line.style.color = '#d455ff';
+                        else if (data.type === 'crawl') line.style.color = '#00ff88';
+                        else if (data.type === 'save') line.style.color = '#fff';
+                        else if (data.type === 'error') line.style.color = '#ff4444';
+                        else line.style.color = '#888';
+
+                        const time = data.timestamp.split('T')[1].split('.')[0];
+                        line.innerText = `[${time}] ${data.message}`;
+                        return line;
+                    }
+
+                    // 1. Update Main Terminal (Always shows everything "Matrix style")
+                    if (termBody) {
+                        termBody.appendChild(createLine());
+                        termBody.scrollTop = termBody.scrollHeight;
+                    }
+
+                    // 2. Update Live View Terminal (ONLY if tracked ticket is active)
+                    // The liveBody variable is already defined at the top of initTerminal.
+                    if (document.getElementById('live-terminal-wrapper') && document.getElementById('live-terminal-wrapper').style.display === 'block' && liveBody) {
+                        liveBody.appendChild(createLine());
+                        liveBody.scrollTop = liveBody.scrollHeight;
+                    }
+                };
+            }
+
+            function showTerminal() {
+                document.getElementById('terminal').style.display = 'block';
+                initTerminal();
+            }
+
+            function closeModal() {
+                document.getElementById('ticket-modal').classList.remove('active');
+                showTerminal(); // Ensure terminal is shown after acknowledging
+            }
+
+            /* --- Live View Logic --- */
+            let livePollInterval = null;
+            let trackedTicketId = null;
+
+            function openLiveView() {
+                document.getElementById('live-view').classList.add('active');
+                // Auto-fill if we have a recent ticket
+                const lastTicket = localStorage.getItem('last_ticket_id');
+                if (lastTicket) {
+                    document.getElementById('ticketInput').value = lastTicket;
+                    trackTicket();
+                }
+            }
+
+            function closeLiveView() {
+                document.getElementById('live-view').classList.remove('active');
+                if (livePollInterval) clearInterval(livePollInterval);
+            }
+
+            async function trackTicket() {
+                const idInput = document.getElementById('ticketInput').value;
+                if (!idInput) return;
+
+                trackedTicketId = parseInt(idInput);
+                localStorage.setItem('last_ticket_id', trackedTicketId);
+
+                document.getElementById('live-status-container').style.display = 'block';
+                document.getElementById('live-queue-msg').innerHTML = 'Checking status...';
+                document.getElementById('live-terminal-wrapper').style.display = 'none';
+
+                fetchLiveStatus();
+                if (livePollInterval) clearInterval(livePollInterval);
+                livePollInterval = setInterval(fetchLiveStatus, 2000);
+
+                // Re-init SSE if needed
+                if (!evtSource) initTerminal();
+            }
+
+            async function fetchLiveStatus() {
+                try {
+                    const res = await fetch('/api/status');
+                    const data = await res.json();
+
+                    // Convert to int for comparison
+                    const myActive = data.active.find(j => j.ticketId == trackedTicketId);
+                    const myQueue = data.queue.findIndex(q => q.ticketId == trackedTicketId);
+
+                    const queueMsg = document.getElementById('live-queue-msg');
+                    const termWrapper = document.getElementById('live-terminal-wrapper');
+                    const termBody = document.getElementById('live-terminal-body');
+
+                    if (myActive) {
+                        // It is running!
+                        queueMsg.style.display = 'none';
+                        termWrapper.style.display = 'block';
+                        document.getElementById('live-target').innerText = `crawling ${myActive.city}...`;
+                    } else if (myQueue !== -1) {
+                        // It is queued
+                        queueMsg.style.display = 'block';
+                        termWrapper.style.display = 'none';
+                        queueMsg.innerHTML = `
+                        <div style="font-size: 1.2rem; color: #fff; margin-bottom: 5px;">Position in Queue: <strong>#${myQueue + 1}</strong></div>
+                        <div style="font-size: 0.9rem; color: #888;">Your job is waiting for an available crawler slot.</div>
+                    `;
+                        termBody.innerHTML = '';
+                    } else {
+                        // Done or invalid
+                        queueMsg.style.display = 'block';
+                        termWrapper.style.display = 'none';
+                        queueMsg.innerHTML = `<span style="color: #666;">Ticket #${trackedTicketId} not found in active queue. It might be completed or invalid.</span>`;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+            // Hook into existing SSE for Live Terminal
+            // Wait, initTerminal sets evtSource.onmessage. We should modify initTerminal to support multiple outputs or multicast.
+            // Let's modify initTerminal below completely to handle both.
+
+            async function submitUrl() {
+                const url = document.getElementById('urlInput').value;
+                const statusEl = document.getElementById('status');
+
+                if (!url) return;
+
+                statusEl.innerText = "Connecting to Satellite...";
+
+                try {
+                    const res = await fetch('/api/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url, category: 'auto' })
+                    });
+                    const data = await res.json();
+
+                    if (data.ticketId) {
+                        // Populate Modal
+                        const modal = document.getElementById('ticket-modal');
+                        const title = document.getElementById('modal-title');
+                        const body = document.getElementById('modal-body');
+
+                        if (data.status === 'started') {
+                            title.innerText = "Ticket Activated";
+                            title.style.color = "#00ff88";
+                            body.innerHTML = `Your crawler has been initialized immediately.<br><br><strong>Ticket #${data.ticketId}</strong><br>Target: ${data.city}`;
+                        } else {
+                            title.innerText = "Added to Queue";
+                            title.style.color = "#007bff";
+                            body.innerHTML = `Our servers are currently busy processing other jobs.<br><br><strong>Ticket #${data.ticketId}</strong><br>Position in Key: <strong>#${data.position}</strong><br>Target: ${data.city}`;
+                        }
+
+                        // Show Modal
+                        modal.classList.add('active');
+
+                        // Clear Input
+                        document.getElementById('urlInput').value = "";
+                        statusEl.innerText = "Ticket Generated.";
+
+                    } else if (data.status === 'queued') {
+                        statusEl.innerText = "Job Queued.";
+                        localStorage.setItem('last_ticket_id', data.ticketId);
+                    } else {
+                        statusEl.innerText = "Error: " + (data.error || "Unknown");
+                    }
+                } catch (e) {
+                    console.error(e);
+                    statusEl.innerText = "Connection Failed: " + e.message;
+                }
+            }
+        </script>
 </body>
 
 </html>

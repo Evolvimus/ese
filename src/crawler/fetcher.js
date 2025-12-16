@@ -1,14 +1,29 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const axiosRetry = require('axios-retry').default; // Robustness
 
-const RAW_USER_AGENT = 'EvolvimusSearchEngine/1.0 (+https://evolvimus.com/bot)';
+const RAW_USER_AGENT = 'Mozilla/5.0 (compatible; EvolvimusBot/1.0; +https://evolvimus.com/bot)';
 
 class SemanticFetcher {
     constructor() {
         this.client = axios.create({
-            timeout: 15000,
-            headers: { 'User-Agent': RAW_USER_AGENT },
-            maxRedirects: 5
+            timeout: 30000, // 30s timeout (increased from 15s)
+            headers: {
+                'User-Agent': RAW_USER_AGENT,
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5'
+            },
+            maxRedirects: 5,
+            validateStatus: (status) => status < 500 // Accept 404s/403s to handle gracefully in logic
+        });
+
+        // 3 Retries with exponential backoff
+        axiosRetry(this.client, {
+            retries: 3,
+            retryDelay: axiosRetry.exponentialDelay,
+            retryCondition: (error) => {
+                return axiosRetry.isNetworkOrIdempotentRequestError(error) || error.code === 'ECONNABORTED';
+            }
         });
     }
 

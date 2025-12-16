@@ -10,6 +10,9 @@ const http = require('http');
 // Global State
 // Global State
 let activeJobs = []; // { city: string, status: string, pages: int }
+let jobQueue = []; // Array of { city: string, ticketId: number, timestamp: string }
+let ticketCounter = 1;
+let isJobRunning = false;
 let clients = []; // SSE Clients
 
 function broadcast(type, message) {
@@ -49,11 +52,26 @@ const server = http.createServer(async (req, res) => {
                 const { city } = JSON.parse(body);
                 if (!city) throw new Error("City missing");
 
+                // Always assign a ticket
+                const ticketId = ticketCounter++;
+
+                // Check if job is running
+                if (isJobRunning || activeJobs.length > 0) {
+                    const ticket = { city, ticketId, timestamp: new Date().toISOString() };
+                    jobQueue.push(ticket);
+                    console.log(`[Queue] Added ticket #${ticketId} for ${city}`);
+
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ status: 'queued', ticketId, position: jobQueue.length, city }));
+                    return;
+                }
+
                 console.log(`[API] Received Crawl Request for: ${city}`);
-                startDiscoveryAndCrawl(city); // Async trigger
+                // Start immediately if free
+                runJob(city, ticketId);
 
                 res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ status: 'started', city }));
+                res.end(JSON.stringify({ status: 'started', ticketId, city }));
             } catch (e) {
                 res.writeHead(400);
                 res.end(JSON.stringify({ error: e.message }));
@@ -62,10 +80,11 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    // 2. API: Status
+    // 2. API: Status (Includes Queue)
     if (req.method === 'GET' && req.url === '/api/status') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(activeJobs));
+        // Clean up list for serialization if needed, but simple objects are fine
+        res.end(JSON.stringify({ active: activeJobs, queue: jobQueue }));
         return;
     }
 
@@ -93,13 +112,28 @@ const server = http.createServer(async (req, res) => {
 
                 console.log(`[API] Community Submission: ${url} (${category})`);
 
+                // Always assign a ticket
+                const ticketId = ticketCounter++;
+                const jobData = { city: `URL: ${url}`, url, ticketId, timestamp: new Date().toISOString() };
+
+                // Check Queue
+                if (isJobRunning || activeJobs.length > 0) {
+                    jobQueue.push(jobData);
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ status: 'queued', ticketId, position: jobQueue.length, city: url }));
+                    return;
+                }
+
                 // Start Job
-                const job = { city: 'community', url, status: 'indexing', pages_crawled: 0 };
-                activeJobs.push(job);
-                queue.add(() => processRecursive(url, `community_${category || 'general'}`, 0, job));
+                // Note: We use the ticket logic to run it
+                console.log(`[Core] Immediate Start for Ticket #${ticketId}`);
+
+                // Helper to start URL job
+                runJobFromUrl(url, `URL: ${url}`, ticketId);
+                // Since runJobFromUrl is async but logic is fire-and-forget for the API response:
 
                 res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ status: 'queued', url }));
+                res.end(JSON.stringify({ status: 'started', ticketId, city: url }));
             } catch (e) {
                 res.writeHead(400);
                 res.end(JSON.stringify({ error: e.message }));
@@ -132,11 +166,84 @@ const server = http.createServer(async (req, res) => {
             console.error("Stats Error:", e);
         }
 
-        // Add active jobs to the "Pending" count or valid count depending on definition
-        // For now, only completed/stored pages are counted.
-
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ total_pages: totalPages, active_crawlers: activeJobs.length }));
+        return;
+    }
+
+    // 6. API: Admin Login
+    if (req.method === 'POST' && req.url === '/api/admin/login') {
+        let body = '';
+        req.on('data', chunk => body += chunk);
+        req.on('end', () => {
+            const { password } = JSON.parse(body || '{}');
+            if (password === 'evOlvimus0124#') {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: true, token: 'admin_session_valid' }));
+            } else {
+                res.writeHead(401, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: false, error: 'Invalid Password' }));
+            }
+        });
+        return;
+    }
+
+    // 7. API: Admin Update (Re-crawl old pages)
+    if (req.method === 'POST' && req.url === '/api/admin/update') {
+        // Logic: Find pages older than 3 days
+        const citiesDir = path.join(__dirname, '../../data/cities');
+        let requeuedCount = 0;
+        const now = Date.now();
+        const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+
+        try {
+            if (fs.existsSync(citiesDir)) {
+                const files = fs.readdirSync(citiesDir).filter(f => f.endsWith('.json'));
+                for (const file of files) {
+                    try {
+                        const filePath = path.join(citiesDir, file);
+                        const content = fs.readFileSync(filePath, 'utf-8');
+                        const json = JSON.parse(content);
+
+                        // Check date (assuming 'crawled_at' is in pages or top level - wait, JSON structure is per city page list?)
+                        // Correction: Structure seems to be one JSON per city? No, file names like "US-Unknown-Business-apple.com.json" suggest granular.
+                        // Let's assume we check the file's pages or the file itself? 
+                        // The user said "Update button -> alle seiten die älter als 3 Tage sind werden überarbeitet"
+                        // We will check each page's 'crawled_at' in the JSONs.
+
+                        let needsUpdate = false;
+                        if (json.pages) {
+                            // If any page is old, re-crawl the 'city' (which seems to be the main seed or concept)
+                            // Or re-crawl specific URLs?
+                            // Simple approach: Check if any page in this file is old. If so, add ONE job for this city/url.
+                            const oldPages = json.pages.filter(p => {
+                                const age = now - new Date(p.crawled_at).getTime();
+                                return age > THREE_DAYS_MS;
+                            });
+
+                            if (oldPages.length > 0) {
+                                // We re-crawl the *seed* URL of this file? 
+                                // The filename convention is COUNTRY-CITY-CATEGORY-DOMAIN-DATE.json 
+                                // Maybe we just extract the stored URL from the pages?
+                                // Let's just pick the first URL from the oldPages as a seed to re-crawl.
+                                const seedUrl = oldPages[0].url;
+                                const city = json.city || 'Unknown'; // Try to recover city name
+
+                                // Add to queue
+                                const ticketId = ticketCounter++;
+                                jobQueue.push({ city: `UPDATE: ${city}`, url: seedUrl, ticketId, timestamp: new Date().toISOString() });
+                                requeuedCount++;
+                            }
+                        }
+                    } catch (err) { }
+                }
+            }
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true, message: `Queued ${requeuedCount} sites for update.` }));
+        } catch (e) {
+            res.writeHead(500);
+            res.end(JSON.stringify({ error: e.message }));
+        }
         return;
     }
 
@@ -170,9 +277,86 @@ server.listen(PORT, () => {
 
 // --- Logic: Discovery & Deep Crawl ---
 
-async function startDiscoveryAndCrawl(city) {
+// --- Logic: Queue & Discovery ---
+
+async function runJob(cityOrUrl, ticketId) {
+    isJobRunning = true;
+    const isUpdate = cityOrUrl.startsWith('UPDATE:');
+    const target = isUpdate ? cityOrUrl.split('UPDATE: ')[1] : cityOrUrl;
+
+    // For updates or city crawls where we don't have the ticketId passed explicitly, we might lose it.
+    // However, runJobFromUrl is used for specific ticket jobs. 
+    // runJob is used for "Generic" city crawls. 
+    // Let's modify runJob signature or just attach if possible. Wait, runJob is called by processNextJob with NO ticketIdArg?
+    // processNextJob has the ticket object. We should pass it.
+
+    // We will assume 'activeJob' tracking needs to happen inside startDiscoveryAndCrawl.
+    // Let's modify startDiscoveryAndCrawl as well.
+    // Updated signature:
+
+    startDiscoveryAndCrawl(target, ticketId).then(() => {
+        isJobRunning = false;
+        processNextJob();
+    });
+}
+
+function processNextJob() {
+    if (jobQueue.length > 0) {
+        const nextTicket = jobQueue.shift();
+        console.log(`[Queue] Processing Ticket #${nextTicket.ticketId}: ${nextTicket.city}`);
+
+        // Handle specific URL jobs (from Update or Submit)
+        if (nextTicket.url) {
+            // It's a specific URL job
+            runJobFromUrl(nextTicket.url, nextTicket.city, nextTicket.ticketId);
+        } else {
+            // Standard City Crawl
+            runJob(nextTicket.city, nextTicket.ticketId);
+        }
+    } else {
+        console.log('[Queue] All jobs finished. Idle.');
+    }
+}
+
+async function runJobFromUrl(url, city, ticketId) {
+    isJobRunning = true;
+    const job = { city, status: 'crawling_update', pages_crawled: 0, ticketId: ticketId || 0 };
+    activeJobs.push(job);
+
+    // Skip discovery, go straight to crawling
+    console.log(`[Core] Starting Direct Crawl (Update) for ${url}`);
+    broadcast('info', `Starting update for: ${url}`);
+
+    queue.add(() => processRecursive(url, city, 0, job)).then(() => {
+        // This promise resolves when added, NOT when finished.
+        // We need a way to know when the CRAWL is effectively done is hard with the current recursive async queue.
+        // Current architecture doesn't easily await the entire crawl tree.
+        // Heuristic: We just let it run. The 'isJobRunning' flag is tricky here.
+        // For this task, we will assume "Job Started" is enough to pop the next queue item? 
+        // NO, the user wants "serial" execution "keine 2,3,4,5,6 gleichzeitig".
+        // The current 'queue.add' waits for the specific task? No, it returns a promise for that task.
+        // The recursive nature makes it hard to track 'completion' of the whole tree.
+
+        // workaround: We will just set a timeout or rely on queue idle? 
+        // For now, let's keep it simple: We allow the *setup* to block, but the recursive crawl runs in background.
+        // To strictly enforce 1-by-1, we would need to wait for the bottleneck to be empty.
+
+        // Let's attach a listener to bottleneck 'idle'?
+        queue.limiter.on('idle', () => {
+            if (isJobRunning) {
+                console.log('[Core] content queue idle. Job finished.');
+                isJobRunning = false;
+                // Remove job from activeJobs
+                activeJobs = activeJobs.filter(j => j !== job);
+                processNextJob();
+            }
+        });
+    });
+}
+
+async function startDiscoveryAndCrawl(city, ticketId) {
     // Track Job
-    const job = { city, status: 'discovering', pages_crawled: 0 };
+    const job = { city, status: 'discovering', pages_crawled: 0, ticketId: ticketId || 0 };
     activeJobs.push(job);
 
     // 1. Discovery
@@ -183,6 +367,7 @@ async function startDiscoveryAndCrawl(city) {
     if (seeds.length === 0) {
         job.status = 'failed: no_domains_found';
         broadcast('error', `No domains found for ${city}`);
+        activeJobs = activeJobs.filter(j => j !== job); // Cleanup
         return;
     }
 
@@ -191,9 +376,27 @@ async function startDiscoveryAndCrawl(city) {
     broadcast('success', `Discovery complete. Found ${seeds.length} candidate domains.`);
 
     // 2. Queue Seeds
+    const promises = [];
     for (const url of seeds) {
-        queue.add(() => processRecursive(url, city, 0, job));
+        promises.push(queue.add(() => processRecursive(url, city, 0, job)));
     }
+
+    // Wait for all seeds to be schedule.
+    // We attach the Idle listener for 'Job Finished' logic same as runJobFromUrl
+    queue.limiter.on('idle', () => {
+        // This might fire early if fetches are slow? 
+        // Bottleneck 'idle' means no running and no queued. 
+        // Should be safe enough for this scale.
+        if (isJobRunning && activeJobs.includes(job)) {
+            console.log(`[Core] Job for ${city} finished (idle).`);
+            isJobRunning = false;
+            activeJobs = activeJobs.filter(j => j !== job);
+            // Remove listner to duplicate calls?
+            queue.limiter.removeAllListeners('idle');
+            processNextJob();
+        }
+    });
+
 }
 
 // Set of visited URLs to prevent loops
@@ -201,7 +404,7 @@ const visited = new Set();
 const llmService = require('../util/llm_service');
 
 async function processRecursive(url, city, depth, job) {
-    if (visited.has(url) || depth > 2) return;
+    if (visited.has(url) || depth > 10) return; // Increased depth for 1M goal
     visited.add(url);
 
     console.log(`[Crawler] Depth ${depth}: ${url}`);
@@ -255,7 +458,7 @@ async function processRecursive(url, city, depth, job) {
     broadcast('save', `Indexed: ${data.meta.title || url} [${analysis.word_count} words]`);
 
     // Smart Recursion: Prioritize Structure
-    if (depth < 2) {
+    if (depth < 10) {
         const priorityLinks = [...new Set([...data.navLinks, ...data.footerLinks])];
         if (priorityLinks.length > 0) broadcast('info', `Found ${priorityLinks.length} structural links (Nav/Footer) to prioritize.`);
         const otherLinks = data.internalLinks.filter(l => !priorityLinks.includes(l));

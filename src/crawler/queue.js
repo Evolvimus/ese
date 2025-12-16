@@ -2,10 +2,10 @@ const Bottleneck = require('bottleneck');
 
 class RequestQueue {
     constructor() {
-        // Limit to 2 requests per second to be polite (500ms min time)
+        // Limit to 50 requests simultaneous (Stable High Speed)
         this.limiter = new Bottleneck({
-            minTime: 500,
-            maxConcurrent: 5
+            minTime: 50, // 50ms (Polite but fast)
+            maxConcurrent: 50
         });
     }
 
